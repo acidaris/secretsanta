@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html ng-app="SecretSanta">
 <head>
-  <title>Raid Builder</title>
+  <title>Secret Santa</title>
   <link rel="stylesheet" type="text/css" href="./assets/css/secretsanta.css"/>
 </head>
 <body>
 
-<div add-participant></div>
-<div participant-list></div>
+<div ng-view></div>
 <!-- your code for nav and calendar directive instance here -->
 
 <script type="text/javascript" src="./assets/js/libs/angular/angular.js"></script>
 <!--<script type="text/javascript" src="./assets/js/libs/angular-resource/angular-resource.js"></script>-->
-<!--<script type="text/javascript" src="./assets/js/libs/angular-route/angular-route.js"></script>-->
+<script type="text/javascript" src="./assets/js/libs/angular-route/angular-route.js"></script>
 <script type="text/javascript" src="./assets/js/libs/ngstorage/ngStorage.js"></script>
 
 <script type="text/javascript" src="./assets/js/secret-santa.js"></script>
+<script type="text/javascript" src="./assets/js/config/routes.js"></script>
 <script type="text/javascript" src="./assets/js/config/localStorage.js"></script>
+<script type="text/javascript" src="./assets/js/controllers/AddController.js"></script>
+<script type="text/javascript" src="./assets/js/controllers/CreateController.js"></script>
 <script type="text/javascript" src="./assets/js/directives/participantList.js"></script>
 <script type="text/javascript" src="./assets/js/directives/addParticipant.js"></script>
 <script type="text/javascript" src="./assets/js/services/participants.js"></script>
+<script type="text/javascript" src="./assets/js/services/assign.js"></script>
 
 </body>
 </html>

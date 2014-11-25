@@ -1,0 +1,10 @@
+<div class="create" ng-init="assign()">
+  <table>
+  <tr ng-repeat="assignment in assignments">
+    <td>{{assignment.participant.name}}</td>
+    <td>Buys for</td>
+    <td>{{assignment.assignment.name}}</td>
+  </tr>
+  </table>
+  <button ng-click="assign()">Generate new list</button>
+</div>

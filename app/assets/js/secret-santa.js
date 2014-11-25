@@ -1,4 +1,5 @@
 angular.module('SecretSanta',[
+  'ngRoute',
   'ngStorage',
   'SecretSanta.participant'
 ]);
