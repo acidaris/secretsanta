@@ -7,13 +7,10 @@ describe('assign tests',function(){
     assign = _assign_;
     $localStorage = _$localStorage_;
 
-    participants.add('Morgan');
-    participants.add('Kayla');
-    participants.add('Heather');
+    participants.addCouple('Heather','Adam');
+    participants.addCouple('Erica','Matt');
+    participants.addCouple('Morgan','Kayla');
     participants.add('Holly');
-    participants.add('Matt');
-    participants.add('Erica');
-    participants.add('Adam');
     participants.add('Erik');
     participants.add('Mom');
 
@@ -26,7 +23,13 @@ describe('assign tests',function(){
       var assignment = assignments[i];
 
       var index = assignment.assignment.index;
-      participants[index].assigned = true;
+      if(index !== undefined){
+        participants[index].assigned = true;
+      }
+      else{
+        return false;
+      }
+
     }
 
     for (var i = 0; i < participants.length; i++) {
@@ -44,7 +47,7 @@ describe('assign tests',function(){
   };
 
   it('confirm assignment', function () {
-    for(var i = 0; i < 100; i++)
+    for(var i = 0; i < 1000; i++)
     {
       assign();
       expect(verifyAssignments($localStorage.assignments)).toBe(true);

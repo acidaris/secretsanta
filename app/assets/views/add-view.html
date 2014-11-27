@@ -1,2 +1,15 @@
-<div add-participant></div>
-<div participant-list></div>
+<div class="add-view">
+  <a href="#/create">Create Assignments</a>
+
+  <div participant-list></div>
+  <div class="add-forms">
+    <div add-participant></div>
+    <div class="add-couple">
+      <form name="addForm" novalidate>
+        <input placeholder="Name" required name="name1" ng-model="participant.name1"/>
+        <input placeholder="Name" required name="name2" ng-model="participant.name2"/>
+        <button type="submit" ng-click="addCouple()">Add Couple</button>
+      </form>
+    </div>
+  </div>
+</div>

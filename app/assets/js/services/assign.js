@@ -2,20 +2,6 @@ angular.module('SecretSanta').service('assign', function ($localStorage) {
 
   var participants = $localStorage.participants;
 
-  var copyAndRemove = function (list, user) {
-    var copy = angular.copy(list);
-
-    for (var i = 0, length = copy.length; i < length; i++) {
-
-      if (user.index === copy[i].index) {
-        copy.splice(i, 1);
-        break;
-      }
-    }
-
-    return copy;
-  };
-
   function getRandomInt(max) {
     return Math.floor(Math.random() * (max));
   }
@@ -25,48 +11,107 @@ angular.module('SecretSanta').service('assign', function ($localStorage) {
 
     angular.forEach(participants, function (participant) {
       assignments.push({
-        participant: participant,
-        assignment: '',
-        possible: copyAndRemove(participants, participant)
+        participant:angular.copy(participant)
       });
     });
     return assignments;
   };
 
-  var removeFromOthers = function (assignments, user) {
-    angular.forEach(assignments, function (participant) {
-      participant.possible = copyAndRemove(participant.possible, user);
-    });
-  };
-
-  var assign = function (assignments) {
-    var index = getRandomInt(assignments.length);
-
-    var current = assignments[index];
-
-    var first = current.participant;
-
-    removeFromOthers(assignments, first);
-
-    while (current.possible.length != 0){
-      var selected = getRandomInt(current.possible.length);
-
-      var assignment = current.possible[selected];
-      current.assignment = assignment;
-      current.possible = [];
-      removeFromOthers(assignments, assignment);
-
-      current = assignments[assignment.index];
+  /**
+   * find first match.  Cannot be first's significant other
+   */
+  var firstMatch = function (list, first) {
+    var current = null;
+    var currentIndex = null;
+    while (!current || current.participant.significantOther == first.participant.index) {
+      currentIndex = getRandomInt(list.length);
+      current = list[currentIndex];
     }
 
+    list.splice(currentIndex, 1);
+
+    first.assignment = current;
     current.assignment = first;
+    return current;
+  };
+
+  /**
+   * find first to insert, cannot be first or second's significant others
+   */
+  var secondMatch = function (list, first, second) {
+    var current = null;
+    var currentIndex = null;
+    while (!current || current.participant.significantOther == first.participant.index ||
+      current.participant.significantOther == second.participant.index) {
+      currentIndex = getRandomInt(list.length);
+      current = list[currentIndex];
+    }
+
+    list.splice(currentIndex, 1);
+
+    first.assignment = current;
+
+    current.assignment = second;
+    return current;
+  };
+
+  var assignRemaining = function (list, first) {
+    while (list.length > 0) {
+
+      var currentIndex = getRandomInt(list.length);
+      var current = list[currentIndex];
+
+
+      var insertPoint = first;
+
+      while (insertPoint.participant.significantOther === current.participant.index ||
+        insertPoint.assignment.participant.significantOther === current.participant.index) {
+        insertPoint = insertPoint.assignment;
+      }
+
+      current.assignment = insertPoint.assignment;
+      insertPoint.assignment = current;
+
+      list.splice(currentIndex, 1);
+
+    }
+
+  };
+
+  var convertLinkedList = function(first,length)
+  {
+    var assigned = [];
+    for (var i = 0, participant = first; i < length; i++, participant = participant.assignment) {
+
+      var assignment = {
+        participant: participant.participant,
+        assignment: participant.assignment.participant
+      };
+
+      assigned.push(assignment);
+    }
+    return assigned;
+  };
+
+  var assign = function () {
+    var list = createInitialList();
+    var length = list.length;
+
+    var firstIndex = getRandomInt(list.length);
+    var first = list.splice(firstIndex, 1)[0];
+
+    var second = firstMatch(list, first);
+
+    secondMatch(list, first, second);
+
+    assignRemaining(list, first);
+
+    return convertLinkedList(first,length);
+
   };
 
   return function () {
 
-    var assignments = createInitialList();
-    assign(assignments);
-
-    $localStorage.assignments = assignments;
+    $localStorage.assignments = assign();
   }
 });

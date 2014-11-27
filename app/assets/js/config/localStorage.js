@@ -4,4 +4,5 @@ angular.module('SecretSanta').run(function ($localStorage) {
     participants: []
   });
 
+//  $localStorage.$reset();
 });
