@@ -6,9 +6,17 @@
     <div add-participant></div>
     <div class="add-couple">
       <form name="addForm" novalidate>
-        <input placeholder="Name" required name="name1" ng-model="participant.name1"/>
+        <div>
+          <input placeholder="Name" required name="name1" ng-model="participant.name1"/>
+        </div>
+        <div>
         <input placeholder="Name" required name="name2" ng-model="participant.name2"/>
+        </div>
+
+        <div>
         <button type="submit" ng-click="addCouple()">Add Couple</button>
+        </div>
+
       </form>
     </div>
   </div>
